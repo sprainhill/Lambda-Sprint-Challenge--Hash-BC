@@ -82,6 +82,11 @@ def valid_proof(last_hash, proof):
     ## check the last sux chars of the hash
     ## of proof p against the first
     ## six chars of the hash of our proof p'
+    last_hash_chars = last_hash[-6:]
+
+    hash_chars = last_hash[:6]
+
+    return last_hash_chars is hash_chars
 
 
 if __name__ == '__main__':
