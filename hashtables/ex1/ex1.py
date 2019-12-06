@@ -13,7 +13,23 @@ def get_indices_of_item_weights(weights, length, limit):
     YOUR CODE HERE
     """
 
-    return None
+    ## loop over weights and
+    ## add them to a hash table
+    for i in range(len(weights)):
+        hash_table_insert(ht, weights[i], i )
+
+    ## loop over again for comp
+    # we check for limit - weight as a key 
+    # in the hash table
+
+    for i in range(len(weights)):
+        # get diff
+        diff = limit - weights[i]
+        # check for key
+        if hash_table_retrieve(ht, diff):
+            idx = hash_table_retrieve(ht, diff)
+            return (idx, i)
+
 
 
 def print_answer(answer):

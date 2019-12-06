@@ -10,7 +10,7 @@ from timeit import default_timer as timer
 import random
 import string
 
-def ran_gen(size=2, chars=string.ascii_uppercase + string.digits):
+def ran_gen(size=1, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size)) 
 
 r1 = ran_gen()
@@ -34,32 +34,23 @@ def proof_of_work(last_proof):
     start = timer()
 
     print("Searching for next proof")
-    proof = ran_gen()
+    proof = (random.random() + 10) * random.random()
     #  TODO: Your code here
-    ## we will take the last_proof p
-    ## encode it and hash it
-    ## store the hash
 
-    # encode as bytes
-    last_proof_encode = f'{last_proof}'.encode()
-
-    last_proof_hashed = hashlib.sha256(last_proof_encode).hexdigest()
-
-    proof_encode = f'{proof}'.encode()
-
-    proof_hashed = hashlib.sha256(proof_encode).hexdigest()
-
-    
     ## take random number p'
     ## hash it
     ## compare the first 6 digits of hashed p'
     ## to the stored last 6 digits of hashed p
-    while valid_proof(last_proof_hashed, proof_hashed) is False:
+    while valid_proof(last_proof, proof) is False:
         # generate a different random string and add
         # to the previous proof
-        add_ran_str = ran_gen()
+        # add_ran_str = ran_gen()
         # print(f"proof + add_ran_str : {proof + add_ran_str}")
-        proof = proof + add_ran_str
+        add_ran_num = random.random() + 1
+        proof += add_ran_num
+        # new_proof = proof + add_ran_str
+        # proof = new_proof
+        
 
     # if valid_proof evaluates as true
     # return that proof as our p'
@@ -79,14 +70,27 @@ def valid_proof(last_hash, proof):
 
     # TODO: Your code here!
     
-    ## check the last sux chars of the hash
+    ## we will take the last_proof p
+    ## encode it and hash it
+    ## store the hash
+
+    # encode as bytes
+    last_proof_encode = f'{last_hash}'.encode()
+
+    last_proof_hashed = hashlib.sha256(last_proof_encode).hexdigest()
+
+    proof_encode = f'{proof}'.encode()
+
+    proof_hashed = hashlib.sha256(proof_encode).hexdigest()
+
+    ## check the last six chars of the hash
     ## of proof p against the first
     ## six chars of the hash of our proof p'
-    last_hash_chars = last_hash[-6:]
+    last_hash_chars = last_proof_hashed[-6:]
 
-    hash_chars = last_hash[:6]
+    hash_chars = proof_hashed[:6]
 
-    return last_hash_chars is hash_chars
+    return last_hash_chars == hash_chars
 
 
 if __name__ == '__main__':
