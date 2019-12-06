@@ -8,7 +8,18 @@ from uuid import uuid4
 from timeit import default_timer as timer
 
 import random
+import string
 
+def ran_gen(size=2, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size)) 
+
+r1 = ran_gen()
+r2 = ran_gen()
+r3 = ran_gen()
+
+print(f"\nr1 : {r1}\n")
+print(f"\nr2 : {r2}\n")
+print(f"\nr3 : {r3}\n")
 
 def proof_of_work(last_proof):
     """
@@ -23,8 +34,35 @@ def proof_of_work(last_proof):
     start = timer()
 
     print("Searching for next proof")
-    proof = 0
+    proof = ran_gen()
     #  TODO: Your code here
+    ## we will take the last_proof p
+    ## encode it and hash it
+    ## store the hash
+
+    # encode as bytes
+    last_proof_encode = f'{last_proof}'.encode()
+
+    last_proof_hashed = hashlib.sha256(last_proof_encode).hexdigest()
+
+    proof_encode = f'{proof}'.encode()
+
+    proof_hashed = hashlib.sha256(proof_encode).hexdigest()
+
+    
+    ## take random number p'
+    ## hash it
+    ## compare the first 6 digits of hashed p'
+    ## to the stored last 6 digits of hashed p
+    while valid_proof(last_proof_hashed, proof_hashed) is False:
+        # generate a different random string and add
+        # to the previous proof
+        add_ran_str = ran_gen()
+        # print(f"proof + add_ran_str : {proof + add_ran_str}")
+        proof = proof + add_ran_str
+
+    # if valid_proof evaluates as true
+    # return that proof as our p'
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -40,7 +78,10 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    
+    ## check the last sux chars of the hash
+    ## of proof p against the first
+    ## six chars of the hash of our proof p'
 
 
 if __name__ == '__main__':
