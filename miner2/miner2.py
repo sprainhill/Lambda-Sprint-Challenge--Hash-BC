@@ -23,30 +23,25 @@ print(f"\nr3 : {r3}\n")
 
 def proof_of_work(last_proof):
     """
-    Multi-Ouroboros of Work Algorithm
-    - Find a number p' such that the last six digits of hash(p) are equal
-    to the first six digits of hash(p')
-    - IE:  last_hash: ...AE9123456, new hash 123456888...
-    - p is the previous proof, and p' is the new proof
-    - Use the same method to generate SHA-256 hashes as the examples in class
+    find a number proof such that the hash of 
+    proof + last_proof (from the server)
+    contain the correct dif
     """
 
     start = timer()
 
     print("Searching for next proof")
-    proof = (random.random() + 17) 
-    #  TODO: Your code here
-
+    proof = random.random() 
     ## take random number p'
+    
     ## hash it
-    ## compare the first 6 digits of hashed p'
-    ## to the stored last 6 digits of hashed p
+  
     while valid_proof(last_proof, proof) is False:
         # generate a different random string and add
         # to the previous proof
         # add_ran_str = ran_gen()
         # print(f"proof + add_ran_str : {proof + add_ran_str}")
-        add_ran_num = random.random() * 200
+        add_ran_num = random.random()
         proof += add_ran_num
         # new_proof = proof + add_ran_str
         # proof = new_proof
